@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+
+<struts>
+    <!-- 设置上传文件的大小 -->
+    <constant name="struts.multipart.maxSize" value="209715200"></constant>
+
+    <package name="ssh" extends="struts-default">
+        <action name="user_*" class="userAction" method="{1}">
+            <result name="loginSuccess">/index.htm</result>
+            <result name="login">/login.jsp</result>
+        </action>
+        <!-- 客户action -->
+        <action name="customer_*" class="customerAction" method="{1}">
+            <!-- 到添加页面 -->
+            <result name="toAddPage">/jsp/customer/add.jsp</result>
+            <!-- 添加之后 -->
+            <result name="add" type="redirectAction">customer_listPage</result>
+            <!-- 列表页面 -->
+            <!--<result name="list">/jsp/customer/list.jsp</result>-->
+            <!-- 删除功能 -->
+            <result name="delete" type="redirectAction">customer_listPage</result>
+            <!-- 修改-到修改页面 -->
+            <result name="showCustomer">/jsp/customer/edit.jsp</result>
+            <!-- 修改之后 -->
+            <result name="update" type="redirectAction">customer_listPage</result>
+            <!-- 分页到页面 -->
+            <result name="listPage">/jsp/customer/list.jsp</result>
+            <!-- 条件查询 -->
+            <result name="listCondition">/jsp/customer/list.jsp</result>
+
+            <!-- 到多条件查询页面 -->
+            <result name="toSelectCustomerPage">/jsp/select/select.jsp</result>
+            <!-- 多条件查询之后 -->
+            <result name="moreCondition">/jsp/customer/list.jsp</result>
+
+            <!--客户来源统计-->
+            <result name="countSource">jsp/customer/listSource.jsp</result>
+            <!-- 客户级别统计 -->
+            <result name="countLevel">jsp/customer/listLevel.jsp</result>
+
+        </action>
+
+        <!-- 联系人action -->
+        <action name="linkman_*" class="linkmanAction" method="{1}">
+            <!-- 到添加页面 -->
+            <result name="toAddPage">/jsp/linkman/add.jsp</result>
+            <!-- 添加之后 -->
+            <result name="addLinkman" type="redirectAction">linkman_list</result>
+            <!-- 配置页面抛出input异常结果的错误页面 -->
+            <result name="input">/jsp/error.jsp</result>
+            <!-- 联系人列表页面 -->
+            <result name="list">/jsp/linkman/list.jsp</result>
+            <!-- 到修改页面 -->
+            <result name="showLinkman">/jsp/linkman/edit.jsp</result>
+            <!-- 修改之后 -->
+            <result name="updateLinkman" type="redirectAction">linkman_list</result>
+            <!-- 删除联系人 -->
+            <result name="deleteLinkman" type="redirectAction">linkman_list</result>
+            <!-- 到联系人综合查询页面 -->
+            <result name="toSelectPage">/jsp/select/linkman.jsp</result>
+            <!-- 多条件组合查询之后 -->
+            <result name="moreCondition">/jsp/linkman/list.jsp</result>
+        </action>
+
+        <!-- 拜访相关action -->
+        <action name="visit_*" class="visitAction" method="{1}">
+            <!-- 到添加页面 -->
+            <result name="toAddPage">/jsp/visit/add.jsp</result>
+            <!-- 添加之后 -->
+            <result name="addVisit" type="redirectAction">visit_list</result>
+            <!-- 客户拜访列表 -->
+            <result name="list">/jsp/visit/list.jsp</result>
+            <!-- 到修改页面 -->
+            <result name="showVisit">/jsp/visit/edit.jsp</result>
+            <!-- 修改之后 -->
+            <result name="updateVisit" type="redirectAction">visit_list</result>
+            <!-- 删除客户拜访记录 -->
+            <result name="deleteVisit" type="redirectAction">visit_list</result>
+            <!-- 到多条件组合查询页面 -->
+            <result name="toSelectPage">jsp/select/visit.jsp</result>
+            <!-- 多条件组合查询之后 -->
+            <result name="moreCondition">/jsp/visit/list.jsp</result>
+
+        </action>
+
+    </package>
+
+</struts>

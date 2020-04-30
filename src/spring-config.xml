@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- 加载jdbc.properties文件的位置 -->
+    <context:property-placeholder location="classpath:druid.properties"/>
+
+    <!-- 配置druid连接池 ，id是固定值，class是druid连接池类的全路径 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <!-- 配置连接数据库的基本信息 -->
+        <property name="driverClassName" value="${db.driverClassName}"></property>
+        <property name="url" value="${db.url}"></property>
+        <property name="username" value="${db.username}"></property>
+        <property name="password" value="${db.password}"></property>
+        <property name="initialSize" value="${db.initialSize}"></property>
+        <property name="maxActive" value="${db.maxActive}"></property>
+        <property name="maxWait" value="${db.maxWait}"></property>
+    </bean>
+
+    <!-- spring与hibernate整合 -->
+    <!-- sessionFactory创建 -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+    </bean>
+
+    <!-- 事务配置_事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+
+    <!-- 开启事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- spring与struts2整合 -->
+
+    <!-- action注入userService -->
+    <bean id="userAction" class="cn.guanzh.action.UserAction" scope="prototype">
+        <property name="userService" ref="userServiceImpl"></property>
+    </bean>
+
+    <bean id="userServiceImpl" class="cn.guanzh.service.impl.UserServiceImpl">
+        <property name="userDao" ref="userDaoImpl"></property>
+    </bean>
+
+    <bean id="userDaoImpl" class="cn.guanzh.dao.impl.UserDaoImpl">
+        <!--<property name="hibernateTemplate" ref="hibernateTemplate"></property>-->
+
+        <!-- hibernateTemplate类中直接继承hibernateTemplatesupport，直接注入 -->
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+
+    <!-- 创建hibernateTemplate并注入sessionFactory -->
+<!--    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>-->
+
+    <!-- 引入其他spring配置文件 -->
+    <import resource="classpath:customer_spring.xml"></import>
+    <import resource="classpath:linkman_spring.xml"></import>
+    <import resource="classpath:visit_spring.xml"></import>
+
+</beans>

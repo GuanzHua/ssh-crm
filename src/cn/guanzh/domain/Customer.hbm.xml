@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="cn.guanzh.domain.Customer" table="t_customer">
+        <id name="cid" column="cid">
+            <generator class="native"></generator>
+        </id>
+        <property name="custName" column="custName"></property>
+        <property name="custSource" column="custSource"></property>
+        <property name="custPhone" column="custPhone"></property>
+        <property name="custMobile" column="custMobile"></property>
+        <property name="custAddress" column="custAddress"></property>
+
+        <!-- 表示客户所有联系人 -->
+        <set name="setLinkman" inverse="true" cascade="delete">
+            <key column="clid"></key>
+            <one-to-many class="cn.guanzh.domain.Linkman"/>
+        </set>
+
+        <!-- 表示客户里的所有拜访记录 -->
+        <set name="setCusVisit" inverse="true" cascade="delete">
+            <key column="cvid"></key>
+            <one-to-many class="cn.guanzh.domain.Visit"/>
+        </set>
+
+        <!-- 表示所属级别 -->
+        <many-to-one name="dictCustLevel" class="cn.guanzh.domain.Dict" column="custLevel"></many-to-one>
+    </class>
+
+    <!--  -->
+</hibernate-mapping>
